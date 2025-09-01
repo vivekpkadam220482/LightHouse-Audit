@@ -8,9 +8,16 @@
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "install-browsers": "playwright install chrome",
-    "lighthouse": "node lighthouse-audit.js"
+    "lighthouse": "node lighthouse-audit.js",
+    "test-disclaimers": "node test-disclaimer-handler.js"
   },
-  "keywords": ["playwright", "lighthouse", "e2e", "testing", "performance"],
+  "keywords": [
+    "playwright",
+    "lighthouse",
+    "e2e",
+    "testing",
+    "performance"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
@@ -18,9 +25,9 @@
     "playwright": "^1.40.0"
   },
   "dependencies": {
-    "csv-parser": "^3.0.0",
-    "lighthouse": "^11.4.0",
     "chrome-launcher": "^1.1.0",
-    "fs-extra": "^11.1.1"
+    "csv-parser": "^3.0.0",
+    "fs-extra": "^11.1.1",
+    "lighthouse": "^12.8.2"
   }
-} 
+}

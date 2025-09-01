@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const { readUrlsFromCSV, getDefaultCSVPath } = require('../utils/csv-reader');
 const { runLighthouseAudit } = require('../utils/lighthouse-runner');
+const { handleDisclaimers } = require('../utils/disclaimer-handler');
 const path = require('path');
 const fs = require('fs-extra');
 
@@ -121,6 +122,9 @@ test.describe('Lighthouse E2E Tests', () => {
           waitUntil: 'networkidle',
           timeout: 30000 
         });
+
+        // Handle any disclaimers that appear
+        await handleDisclaimers(page);
 
         // Verify page loaded successfully
         await expect(page).toHaveTitle(/./);

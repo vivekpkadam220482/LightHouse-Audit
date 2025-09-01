@@ -16,6 +16,7 @@ This framework has been successfully tested and is working perfectly! It can aud
 - 🎯 **Navigation Mode**: Uses Lighthouse's default Navigation mode for realistic testing
 - 🚀 **Standalone Script**: Can run independently or as part of Playwright test suite
 - 🎨 **Beautiful Reports**: Professional HTML summary with statistics and visual indicators
+- 🏥 **Disclaimer Handling**: Automatically handles consent and cookie disclaimers
 
 ## Prerequisites
 
@@ -50,7 +51,8 @@ lighthouse-e2e-tests/
 │   └── urls.csv                 # CSV file with URLs to test
 ├── utils/
 │   ├── csv-reader.js           # CSV parsing utility
-│   └── lighthouse-runner.js    # Lighthouse audit runner
+│   ├── lighthouse-runner.js    # Lighthouse audit runner
+│   └── disclaimer-handler.js   # Disclaimer popup handler
 ├── tests/
 │   └── lighthouse-e2e.spec.js  # Playwright E2E tests
 ├── reports/                    # Generated reports (created after running)
@@ -186,6 +188,88 @@ The framework runs Lighthouse with the following settings:
 - Best Practices
 - SEO
 
+## Disclaimer Handling
+
+The framework automatically handles common disclaimers that appear when accessing URLs:
+
+### Consent Disclaimer
+- **Action**: Clicks "I am a Healthcare Professional" button
+- **Supported Selectors**: Multiple variations including buttons, links, and elements with healthcare-related text
+- **Use Case**: Common in pharmaceutical and healthcare websites
+
+### Cookie Disclaimer  
+- **Action**: Clicks "Ok", "Accept", "Accept All", "I Accept", "I Agree", "Allow", "Allow All", "Got it", "Close", "Continue", "Proceed", or similar buttons
+- **Supported Selectors**: Multiple variations including buttons, links, and cookie-related elements
+- **Use Case**: GDPR compliance popups, cookie consent banners, and general consent dialogs
+
+### How It Works
+1. **Automatic Detection**: The framework checks for disclaimer elements after page load
+2. **Multiple Selectors**: Uses various CSS selectors to find disclaimer buttons including:
+   - Text-based selectors: `text="I am a Healthcare Professional"`
+   - Button selectors: `button:has-text("Ok")`
+   - Attribute selectors: `[data-testid*="consent"]`
+   - Class/ID selectors: `.cookie-button`, `#consent-button`
+   - Role-based selectors: `[role="button"]`
+3. **Sequential Processing**: Handles consent disclaimers first, then cookie disclaimers
+4. **Timeout Handling**: Waits for elements to be visible before clicking
+5. **Graceful Handling**: If no disclaimers are found, testing continues normally
+6. **Logging**: Console output shows when disclaimers are detected and handled
+
+### Customization
+You can modify `utils/disclaimer-handler.js` to:
+- Add new selector patterns for specific websites
+- Change the click behavior
+- Add additional disclaimer types
+- Modify timeout values
+- Extend selector arrays for better coverage
+
+#### Example Custom Selectors
+```javascript
+// Add to consentSelectors array
+'button:has-text("Custom Healthcare Button")',
+'[data-testid="custom-consent-button"]',
+'.custom-consent-class button',
+
+// Add to cookieSelectors array  
+'button:has-text("Custom Accept Button")',
+'[data-testid="custom-cookie-button"]',
+'.custom-cookie-class button'
+```
+
+### Testing Disclaimer Handler
+Test the disclaimer handler functionality:
+
+```bash
+npm run test-disclaimers
+```
+
+This will:
+- Open a browser in headed mode for visual inspection
+- Navigate to test URLs (Google, GitHub)
+- Check for and handle any disclaimers
+- Display console output showing disclaimer detection
+- Keep browser open for 30 seconds for manual verification
+
+#### Test Output Example
+```
+🧪 Testing Disclaimer Handler...
+
+🌐 Testing: Google (should have no disclaimers)
+🔗 URL: https://www.google.com
+📄 Page loaded, checking for disclaimers...
+🔍 Checking for disclaimers...
+✅ Disclaimers handled successfully
+✅ Disclaimer check completed
+
+🌐 Testing: GitHub (should have no disclaimers)
+🔗 URL: https://www.github.com
+📄 Page loaded, checking for disclaimers...
+🔍 Checking for disclaimers...
+🍪 Found cookie disclaimer, clicking "Ok"
+✅ Disclaimers handled successfully
+✅ Disclaimer check completed
+```
+
 ## Customization
 
 ### Modify CSV File
@@ -219,6 +303,7 @@ Modify `tests/lighthouse-e2e.spec.js` to add:
 3. **Permission errors**: Run with appropriate permissions for file system access
 4. **Network timeouts**: Increase timeout values in the configuration files
 5. **Lighthouse import errors**: The framework uses the correct import path for Lighthouse v11
+6. **Disclaimer not handled**: Check console output for disclaimer detection messages. If disclaimers aren't being handled, you may need to add custom selectors to `utils/disclaimer-handler.js`
 
 ### ✅ Verified Working
 
@@ -325,6 +410,7 @@ This framework is **production-ready** and has been successfully tested with rea
 The framework will automatically:
 - ✅ Read your URLs from CSV
 - ✅ Open each URL in Chrome browser
+- ✅ Handle any consent or cookie disclaimers
 - ✅ Run Lighthouse audits for both mobile and desktop
 - ✅ Capture screenshots of each page
 - ✅ Generate comprehensive reports

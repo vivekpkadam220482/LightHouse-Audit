@@ -2,6 +2,7 @@ const lighthouse = require('lighthouse/core/index.cjs');
 const chromeLauncher = require('chrome-launcher');
 const fs = require('fs-extra');
 const path = require('path');
+const { handleDisclaimers } = require('./disclaimer-handler');
 
 /**
  * Run Lighthouse audit for a URL
@@ -29,8 +30,8 @@ async function runLighthouseAudit(url, device, outputDir) {
           { rttMs: 40, throughputKbps: 10240, cpuSlowdownMultiplier: 1 } :
           { rttMs: 40, throughputKbps: 10240, cpuSlowdownMultiplier: 1 },
         screenEmulation: device === 'mobile' ? 
-          { mobile: true, width: 375, height: 667, deviceScaleFactor: 2, disabled: false } :
-          { mobile: false, width: 1350, height: 940, deviceScaleFactor: 1, disabled: false },
+          { mobile: true, width: 390, height: 844, deviceScaleFactor: 2, disabled: false } :
+          { mobile: false, width: 1920, height: 1080, deviceScaleFactor: 1, disabled: false },
         emulatedUserAgent: device === 'mobile' ?
           'Mozilla/5.0 (Linux; Android 10; Pixel 3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.120 Mobile Safari/537.36' :
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -72,6 +73,10 @@ async function runLighthouseAudit(url, device, outputDir) {
     
     try {
       await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+      
+      // Handle any disclaimers that appear
+      await handleDisclaimers(page);
+      
       await page.screenshot({ path: screenshotPath, fullPage: true });
     } catch (error) {
       console.warn(`Failed to take screenshot for ${url}: ${error.message}`);
