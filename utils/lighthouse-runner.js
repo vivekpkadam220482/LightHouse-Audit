@@ -64,7 +64,10 @@ async function runLighthouseAudit(url, device, outputDir) {
     
     // Use Playwright to take screenshot
     const { chromium } = require('playwright');
-    const browser = await chromium.launch({ headless: true });
+    const browser = await chromium.launch({ 
+      headless: true,
+      args: ['--disable-dev-shm-usage', '--no-sandbox', '--disable-setuid-sandbox']
+    });
     const context = await browser.newContext({
       viewport: device === 'mobile' ? { width: 375, height: 667 } : { width: 1350, height: 940 },
       userAgent: config.settings.emulatedUserAgent
@@ -81,7 +84,15 @@ async function runLighthouseAudit(url, device, outputDir) {
     } catch (error) {
       console.warn(`Failed to take screenshot for ${url}: ${error.message}`);
     } finally {
+      // Properly close all resources
+      await page.close();
+      await context.close();
       await browser.close();
+      
+      // Force garbage collection if available
+      if (global.gc) {
+        global.gc();
+      }
     }
 
     console.log(`Lighthouse audit completed for ${url} on ${device}`);

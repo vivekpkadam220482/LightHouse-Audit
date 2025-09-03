@@ -116,6 +116,9 @@ npm run test:headed
 
 # Run tests in debug mode
 npm run test:debug
+
+# Run tests with memory management (recommended for large URL lists)
+npm run test:memory
 ```
 
 ## CSV File Format
@@ -304,6 +307,7 @@ Modify `tests/lighthouse-e2e.spec.js` to add:
 4. **Network timeouts**: Increase timeout values in the configuration files
 5. **Lighthouse import errors**: The framework uses the correct import path for Lighthouse v11
 6. **Disclaimer not handled**: Check console output for disclaimer detection messages. If disclaimers aren't being handled, you may need to add custom selectors to `utils/disclaimer-handler.js`
+7. **Heap out of memory**: Use `npm run test:memory` instead of `npm test` for large URL lists, or reduce the number of URLs in your CSV file
 
 ### ✅ Verified Working
 
@@ -333,6 +337,7 @@ This will open the browser in headed mode and pause execution for debugging.
 4. **Caching**: Lighthouse results are not cached - each run is fresh
 5. **Memory Management**: Each audit runs in isolation to prevent memory leaks
 6. **Error Recovery**: Failed audits don't stop the entire process - other URLs continue
+7. **Memory Optimization**: Use `npm run test:memory` for large URL lists to prevent heap out of memory errors
 
 ## 🎯 **What You Get**
 

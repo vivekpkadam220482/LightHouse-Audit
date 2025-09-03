@@ -7,8 +7,9 @@
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
+    "test:memory": "node --expose-gc --max-old-space-size=4096 node_modules/@playwright/test/cli.js test",
     "install-browsers": "playwright install chrome",
-    "lighthouse": "node lighthouse-audit.js",
+    "lighthouse": "node --expose-gc --max-old-space-size=4096 lighthouse-audit.js",
     "test-disclaimers": "node test-disclaimer-handler.js"
   },
   "keywords": [
