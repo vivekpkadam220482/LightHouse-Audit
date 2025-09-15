@@ -43,6 +43,10 @@ pids
 *.pid
 *.seed
 *.pid.lock
+*.html
+*.png
+*lighthouse-report.json*
+*summary.json*
 
 # Coverage directory used by tools like istanbul
 coverage/
