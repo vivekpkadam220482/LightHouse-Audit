@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Test script for disclaimer handler
+ * Test script for disclaimer handler 
  * This script tests the disclaimer handling functionality
  */
 

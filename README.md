@@ -211,7 +211,7 @@ The framework automatically handles common disclaimers that appear when accessin
    - Text-based selectors: `text="I am a Healthcare Professional"`
    - Button selectors: `button:has-text("Ok")`
    - Attribute selectors: `[data-testid*="consent"]`
-   - Class/ID selectors: `.cookie-button`, `#consent-button`
+   - Class/ID selector: `.cookie-button`, `#consent-button`
    - Role-based selectors: `[role="button"]`
 3. **Sequential Processing**: Handles consent disclaimers first, then cookie disclaimers
 4. **Timeout Handling**: Waits for elements to be visible before clicking

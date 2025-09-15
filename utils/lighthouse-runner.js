@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const { handleDisclaimers } = require('./disclaimer-handler');
 
-/**
+/**8888888
  * Run Lighthouse audit for a URL
  * @param {string} url - URL to audit
  * @param {string} device - 'desktop' or 'mobile'

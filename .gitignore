@@ -47,7 +47,7 @@ pids
 # Coverage directory used by tools like istanbul
 coverage/
 
-# nyc test coverage
+# nyc test coverage8
 .nyc_output
 
 # Dependency directories
